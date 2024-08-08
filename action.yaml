@@ -1,0 +1,19 @@
+name: "Podcast Generator"
+author: "Greg Thomas Andes"
+description: "Generates a feed for a podcast from a YAML file"
+runs:
+  using: "docker"
+  image: "Dockerfile"
+branding:
+  icon: "git-branch"
+  color: "red"
+inputs:
+  email:
+    description: The committer's email address
+    required: true
+    default: ${{github.actor}}@localhost
+
+  name:
+    description: The committer github username
+    required: true
+    default: ${{github.actor}}
