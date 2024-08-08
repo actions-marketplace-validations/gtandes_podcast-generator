@@ -1,0 +1,37 @@
+name: Generate Podcast Feeds
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout current Repo
+        uses: actions/checkout@v4.1.7
+
+      - name: Fetch Dockerfile
+        run: |
+          wget https://raw.githubusercontent.com/gtandes/podcast-generator/main/Dockerfile
+          wget https://raw.githubusercontent.com/gtandes/podcast-generator/main/entrypoint.sh
+          wget https://raw.githubusercontent.com/gtandes/podcast-generator/main/feed.py
+          chmod +x entrypoint.sh
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          load: true
+          tags: podcast-generator:latest
+
+      - name: Run Feed Generator
+        run: |
+          docker run --rm \
+            -e INPUT_EMAIL="${{ github.actor }}@users.noreply.github.com" \
+            -e INPUT_NAME="${{ github.actor }}" \
+            -v ${{ github.workspace }}:/github/workspace \
+            podcast-generator:latest
