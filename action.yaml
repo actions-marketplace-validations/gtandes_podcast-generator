@@ -1,4 +1,4 @@
-name: "Podcast Generator"
+name: "gtandes/Podcast-Generator"
 author: "Greg Thomas Andes"
 description: "Generates a feed for a podcast from a YAML file"
 
