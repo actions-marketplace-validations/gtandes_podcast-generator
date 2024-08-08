@@ -15,7 +15,11 @@ RUN . /opt/venv/bin/activate && pip install PyYAML
 COPY feed.py /usr/bin/feed.py
 COPY entrypoint.sh /entrypoint.sh
 
+# Ensure the entrypoint script has the correct line endings and is executable
+RUN sed -i 's/\r$//' /entrypoint.sh && \
+    chmod +x /entrypoint.sh
+
 # Modify entrypoint.sh to activate the virtual environment
 RUN sed -i '1i\. /opt/venv/bin/activate' /entrypoint.sh
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
